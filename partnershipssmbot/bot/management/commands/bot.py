@@ -18,29 +18,31 @@ def create_db(update: Update, context: CallbackContext):
         user = update.message.from_user.username
     external_id = update.message.from_user.id
     text = update.message.text
-
-    Profile.objects.get_or_create(
-        external_id=external_id,
-        defaults={
-            'name': user,
-            'external_id': external_id,
-            'invite_from': text,
-            'invited_users': 0,
-        }
-    )
-    Profile.objects.get_or_create(
-        name=text,
-        defaults={
-            'name': text,
-            'external_id': random.randint(1,100000),
-            'invite_from': '',
-            'invited_users': 1,
-        }
-    )
-    reply_text = "Вы успешно зарегистрировали партнера, ссылка на телеграм канал: t.me/joinchat/AAAAAE2wXNaz5xShifACyA"
-    update.message.reply_text(
-        text=reply_text
-    )
+    if text != '/start':
+        Profile.objects.get_or_create(
+            external_id=external_id,
+            defaults={
+                'name': user,
+                'external_id': external_id,
+                'invite_from': text,
+                'invited_users': 0,
+            }
+        )
+        Profile.objects.get_or_create(
+            name=text,
+            defaults={
+                'name': text,
+                'external_id': random.randint(1,100000),
+                'invite_from': '',
+                'invited_users': 1,
+            }
+        )
+        reply_text = "Вы успешно зарегистрировали партнера, ссылка на телеграм канал: t.me/joinchat/AAAAAE2wXNaz5xShifACyA"
+        update.message.reply_text(
+            text=reply_text
+        )
+    else:
+        return True
 
 
 def kostil(update: Update,context: CallbackContext):
